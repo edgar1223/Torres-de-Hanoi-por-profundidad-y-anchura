@@ -1,0 +1,135 @@
+public class Pila<E> {
+
+    private NodoP cima;
+    private int tam = 0;
+
+    public Pila() {
+        cima = null;
+    }
+
+    public NodoP getCima() {
+        return cima;
+    }
+
+    public void setCima(NodoP cima) {
+        this.cima = cima;
+    }
+
+    public void push(int elemento) {
+        NodoP nuevoNodo = new NodoP(elemento);
+        /*if (cima == null) {
+            nuevoNodo.setSiguiente(cima);
+            cima = nuevoNodo;
+            tam++;
+        } else if (nuevoNodo.getElemento() < cima.getElemento()) {*/
+            nuevoNodo.setSiguiente(cima);
+            cima = nuevoNodo;
+            tam++;
+        /*} else {
+            throw new IllegalArgumentException("No se puede tener un disco menor primero");
+        }*/
+
+    }
+
+    public void push2(int elemento) {
+        NodoP nuevoNodo = new NodoP(elemento);
+        nuevoNodo.setSiguiente(cima);
+        cima = nuevoNodo;
+        tam++;
+
+    }
+
+    public int pop() {
+        if (cima == null) {
+            throw new IllegalStateException("Pila vacía");
+        }
+        int elemento = cima.getElemento();
+        cima = cima.getSiguiente();
+        tam--;
+        return elemento;
+    }
+
+    public int getTam() {
+        return tam;
+    }
+
+    public void setTam(int tam) {
+        this.tam = tam;
+    }
+
+    public boolean isEmpty() {
+        return cima == null;
+    }
+
+    public int peek() {
+        if (cima == null) {
+            throw new IllegalStateException("Pila vacía");
+        }
+        return cima.getElemento();
+    }
+
+    /*
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        NodoP actual = cima;
+        while (actual != null) {
+            sb.append(actual.getElemento());
+            actual = actual.getSiguiente();
+            if (actual != null) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
+    }*/
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        NodoP actual = cima;
+        Pila<E> tempStack = new Pila<>(); 
+
+        while (actual != null) {
+            tempStack.push2(actual.getElemento());
+            actual = actual.getSiguiente();
+        }
+
+        while (!tempStack.isEmpty()) {
+            sb.append(tempStack.pop());
+            if (!tempStack.isEmpty()) {
+                sb.append(", ");
+            }
+        }
+
+        sb.append("]");
+        return sb.toString();
+    }
+
+
+    public boolean equals(Pila<E> otraPila) {
+        // Si el tamaño de las pilas es diferente, no son iguales
+        if (this.tam != otraPila.tam) {
+            return false;
+        }
+
+        // Compara elemento por elemento de las pilas
+        NodoP nodoActualThis = this.cima;
+        NodoP nodoActualOtra = otraPila.cima;
+
+        while (nodoActualThis != null && nodoActualOtra != null) {
+            // Si los elementos no son iguales, las pilas no son iguales
+            if (nodoActualThis.getElemento() != nodoActualOtra.getElemento()) {
+                return false;
+            }
+
+            // Avanza al siguiente nodo
+            nodoActualThis = nodoActualThis.getSiguiente();
+            nodoActualOtra = nodoActualOtra.getSiguiente();
+        }
+
+        // Si se recorrieron ambas pilas y todos los elementos son iguales, las pilas son iguales
+        return true;
+    }
+}
